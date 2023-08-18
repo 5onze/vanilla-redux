@@ -3,6 +3,7 @@ import { createStore } from "redux";
 const ADD = "ADD";
 const DELETE = "DELETE";
 
+// action creator
 export const addToDo = (text) => {
   return {
     type: ADD,
