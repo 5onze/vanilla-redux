@@ -5,7 +5,6 @@ import ToDo from "../components/ToDo";
 
 function Home({ toDos, addToDo }) {
   const [text, setText] = useState("");
-  console.log(toDos);
   function onChange(e) {
     setText(e.target.value);
   }
