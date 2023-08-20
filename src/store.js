@@ -1,8 +1,9 @@
-import { createStore } from "redux";
+import { createStore, combineReducers } from "redux";
+import { persistStore, persistReducer } from "redux-persist";
+import storage from "redux-persist/lib/storage";
 
 const ADD = "ADD";
 const DELETE = "DELETE";
-const TODOS = "todos";
 
 // action creator
 const addToDo = (text) => {
@@ -19,30 +20,42 @@ const deleteToDo = (id) => {
   };
 };
 
-// localStorage
-const getTodos = () => JSON.parse(localStorage.getItem(TODOS));
-const setTodos = (todos) => localStorage.setItem(TODOS, JSON.stringify(todos));
-
 const reducer = (state = [], action) => {
   switch (action.type) {
     case ADD:
-      const addObj = [{ text: action.text, id: Date.now() }, ...state];
-      setTodos(addObj);
-      return getTodos();
+      return [{ text: action.text, id: Date.now() }, ...state];
     case DELETE:
-      const filterToDos = state.filter((toDo) => toDo.id !== action.id);
-      setTodos(filterToDos);
-      return getTodos();
+      return state.filter((toDo) => toDo.id !== action.id);
     default:
-      return getTodos() || state;
+      return state;
   }
 };
-
-const store = createStore(reducer);
 
 export const actionCreators = {
   addToDo,
   deleteToDo,
 };
 
-export default store;
+/* redux persist */
+
+// 새로운 persistConfig 선언
+const persistConfig = {
+  key: "todos",
+  storage,
+};
+
+const rootReducer = combineReducers({
+  reducer,
+});
+
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+
+const store = createStore(persistedReducer);
+const persistor = persistStore(store);
+
+const stores = {
+  store,
+  persistor,
+};
+
+export default stores;
