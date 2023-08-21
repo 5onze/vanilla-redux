@@ -1,7 +1,7 @@
-import { createStore, combineReducers } from "redux";
+import { combineReducers } from "redux";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
-import { createAction, createReducer } from "@reduxjs/toolkit";
+import { configureStore, createAction, createReducer } from "@reduxjs/toolkit";
 
 const addToDo = createAction("ADD");
 const deleteToDo = createAction("DELETE");
@@ -36,7 +36,7 @@ const rootReducer = combineReducers({
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-const store = createStore(persistedReducer);
+const store = configureStore({ reducer: persistedReducer });
 const persistor = persistStore(store);
 
 const stores = {
