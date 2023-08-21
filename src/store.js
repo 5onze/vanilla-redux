@@ -25,11 +25,11 @@ const persistConfig = {
   storage,
 };
 
-const rootReducer = combineReducers({
-  reducer: toDos.reducer,
+const reducers = combineReducers({
+  todo: toDos.reducer,
 });
 
-const persistedReducer = persistReducer(persistConfig, rootReducer);
+const persistedReducer = persistReducer(persistConfig, reducers);
 
 const store = configureStore({
   reducer: persistedReducer,
